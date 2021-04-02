@@ -254,7 +254,8 @@ void MaterializeMetadata::startReplication(
     try
     {
         connection->query("FLUSH TABLES;").execute();
-        connection->query("FLUSH TABLES WITH READ LOCK;").execute();
+        //Removed since this isn't allowed in AWS.  Not sure what havoc this will cause.
+        //connection->query("FLUSH TABLES WITH READ LOCK;").execute();
 
         locked_tables = true;
         fetchMasterStatus(connection);
@@ -264,7 +265,7 @@ void MaterializeMetadata::startReplication(
 
         opened_transaction = true;
         need_dumping_tables = fetchTablesCreateQuery(connection, database, fetchTablesInDB(connection, database));
-        connection->query("UNLOCK TABLES;").execute();
+        //connection->query("UNLOCK TABLES;").execute();
     }
     catch (...)
     {
